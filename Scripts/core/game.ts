@@ -16,15 +16,45 @@ namespace core {
 
 
     // Variable Declarations
+
+    //declare a reference to the preloader
+    export let assets: createjs.LoadQueue;
+
     // make a reference to the canvas element
     let canvas: HTMLElement = document.getElementById("canvas");
     // create a reference to a stage container
-   export let stage: createjs.Stage;
+    export let stage: createjs.Stage;
 
     let helloLabel: objects.Label;
 
     let startButton: objects.Button; // reference to our button class
 
+    //Declare scene variables
+    let currentScene: objects.Scene;
+    let scene: number;
+
+
+    // asset manifest for images and sounds
+    let assetData = [
+
+        { id: "startButton", src: "../../Assets/images/startButton.png" }
+
+    ];
+
+    /**
+     * This method preloads assets for the game
+     * 
+     * @method preload
+     * @returns {void}
+     * 
+     */
+    function preload() {
+
+        assets = new createjs.LoadQueue; //instantiates loader
+        assets.installPlugin(createjs.Sound);
+        assets.on("complete", init, this);
+        assets.loadManifest(assetData);
+    }
     /**
      * This method is the entry point for the application
      * 
@@ -36,7 +66,10 @@ namespace core {
         stage.enableMouseOver(20);
         createjs.Ticker.framerate = 60;
         createjs.Ticker.on("tick", gameLoop); // create an event listener for the tick event
-        main(); // call the main game function
+        //setup the default scene
+        scene = config.Scene.MENU;
+        changeScene();
+
     }
 
     /**
@@ -48,7 +81,10 @@ namespace core {
      */
     function gameLoop(event: createjs.Event): void {
 
+        //calls the scenes's update
+        currentScene.Update();
         stage.update(); // refreshes the stage
+        
     }
 
     /**
@@ -60,29 +96,40 @@ namespace core {
         helloLabel.text = "clicked!";
     }
 
+
+    function changeScene(): void {
+        //Launch various Scenes
+        switch (scene) {
+            // Show the menu scene
+            case config.Scene.MENU:
+            stage.removeAllChildren();
+            //menu = new scenes.Menu();
+            // currentScene = menu;
+            break;
+            // Show the Play scene
+            case config.Scene.PLAY:
+            stage.removeAllChildren();
+            //play = new scenes.Play();
+            // currentScene = play;
+                break;
+            // Show the game over scene
+            case config.Scene.OVER:
+            stage.removeAllChildren();
+            //over = new scenes.Over(); 
+            // currentScene = over;
+                break;
+        }
+    }
     /**
      * This is the main game method
      * 
      * @method main
      * @returns {void}
      */
-    function main(): void {
-        helloLabel = new objects.Label("Hello World!", "40px", "Consolas", "#000000",320,240);
-        helloLabel.regX = helloLabel.getMeasuredWidth() * 0.5;
-        helloLabel.regY = helloLabel.getMeasuredHeight() * 0.5;
-        helloLabel.x = 320;
-        helloLabel.y = 240;
-        stage.addChild(helloLabel);
 
-        startButton = new objects.Button(
-            "../../Assets/images/startButton.png", 320, 340, true);
-        stage.addChild(startButton);
-
-        startButton.on("click", startButtonClick);
-    }
 
     //wait until the window object is finished loading then call the init method
-    window.addEventListener("load", init);
+    window.addEventListener("load", preload);
 
 }
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

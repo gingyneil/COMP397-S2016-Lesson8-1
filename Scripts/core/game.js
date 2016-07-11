@@ -9,11 +9,30 @@
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var core;
 (function (core) {
-    // Variable Declarations
     // make a reference to the canvas element
     var canvas = document.getElementById("canvas");
     var helloLabel;
     var startButton; // reference to our button class
+    //Declare scene variables
+    var currentScene;
+    var scene;
+    // asset manifest for images and sounds
+    var assetData = [
+        { id: "startButton", src: "../../Assets/images/startButton.png" }
+    ];
+    /**
+     * This method preloads assets for the game
+     *
+     * @method preload
+     * @returns {void}
+     *
+     */
+    function preload() {
+        core.assets = new createjs.LoadQueue; //instantiates loader
+        core.assets.installPlugin(createjs.Sound);
+        core.assets.on("complete", init, this);
+        core.assets.loadManifest(assetData);
+    }
     /**
      * This method is the entry point for the application
      *
@@ -25,7 +44,9 @@ var core;
         core.stage.enableMouseOver(20);
         createjs.Ticker.framerate = 60;
         createjs.Ticker.on("tick", gameLoop); // create an event listener for the tick event
-        main(); // call the main game function
+        //setup the default scene
+        scene = config.Scene.MENU;
+        changeScene();
     }
     /**
      * This is the main game loop
@@ -35,6 +56,8 @@ var core;
      * @returns {void}
      */
     function gameLoop(event) {
+        //calls the scenes's update
+        currentScene.Update();
         core.stage.update(); // refreshes the stage
     }
     /**
@@ -45,25 +68,37 @@ var core;
     function startButtonClick(event) {
         helloLabel.text = "clicked!";
     }
+    function changeScene() {
+        //Launch various Scenes
+        switch (scene) {
+            // Show the menu scene
+            case config.Scene.MENU:
+                core.stage.removeAllChildren();
+                //menu = new scenes.Menu();
+                // currentScene = menu;
+                break;
+            // Show the Play scene
+            case config.Scene.PLAY:
+                core.stage.removeAllChildren();
+                //play = new scenes.Play();
+                // currentScene = play;
+                break;
+            // Show the game over scene
+            case config.Scene.OVER:
+                core.stage.removeAllChildren();
+                //over = new scenes.Over(); 
+                // currentScene = over;
+                break;
+        }
+    }
     /**
      * This is the main game method
      *
      * @method main
      * @returns {void}
      */
-    function main() {
-        helloLabel = new objects.Label("Hello World!", "40px", "Consolas", "#000000", 320, 240);
-        helloLabel.regX = helloLabel.getMeasuredWidth() * 0.5;
-        helloLabel.regY = helloLabel.getMeasuredHeight() * 0.5;
-        helloLabel.x = 320;
-        helloLabel.y = 240;
-        core.stage.addChild(helloLabel);
-        startButton = new objects.Button("../../Assets/images/startButton.png", 320, 340, true);
-        core.stage.addChild(startButton);
-        startButton.on("click", startButtonClick);
-    }
     //wait until the window object is finished loading then call the init method
-    window.addEventListener("load", init);
+    window.addEventListener("load", preload);
 })(core || (core = {}));
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 //# sourceMappingURL=game.js.map
