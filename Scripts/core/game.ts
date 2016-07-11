@@ -31,9 +31,9 @@ namespace core {
 
     //Declare scene variables
     let currentScene: objects.Scene;
-    let scene: number;
+    export let scene: number;
 
-
+    let menu: scenes.Menu;
     // asset manifest for images and sounds
     let assetData = [
 
@@ -84,7 +84,7 @@ namespace core {
         //calls the scenes's update
         currentScene.Update();
         stage.update(); // refreshes the stage
-        
+
     }
 
     /**
@@ -97,26 +97,26 @@ namespace core {
     }
 
 
-    function changeScene(): void {
+    export function changeScene(): void {
         //Launch various Scenes
         switch (scene) {
             // Show the menu scene
             case config.Scene.MENU:
-            stage.removeAllChildren();
-            //menu = new scenes.Menu();
-            // currentScene = menu;
-            break;
+                stage.removeAllChildren();
+                //menu = new scenes.Menu();
+                // currentScene = menu;
+                break;
             // Show the Play scene
             case config.Scene.PLAY:
-            stage.removeAllChildren();
-            //play = new scenes.Play();
-            // currentScene = play;
+                stage.removeAllChildren();
+                //play = new scenes.Play();
+                // currentScene = play;
                 break;
             // Show the game over scene
             case config.Scene.OVER:
-            stage.removeAllChildren();
-            //over = new scenes.Over(); 
-            // currentScene = over;
+                stage.removeAllChildren();
+                //over = new scenes.Over(); 
+                // currentScene = over;
                 break;
         }
     }

@@ -3,3 +3,4 @@
 /// <reference path="../objects/button.ts"/>
 ///referenence path="../objects/label.ts"/>
 ///referenence path="../objects/scene.ts"/>
+///referenence path="../scenes/menu.ts"/>
