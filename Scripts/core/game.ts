@@ -10,6 +10,11 @@
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+namespace core {
+
+
+
+
 // Variable Declarations
 // make a reference to the canvas element
 let canvas:HTMLElement = document.getElementById("canvas");
@@ -79,4 +84,5 @@ function main():void {
 //wait until the window object is finished loading then call the init method
 window.addEventListener("load", init);
 
+}
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
